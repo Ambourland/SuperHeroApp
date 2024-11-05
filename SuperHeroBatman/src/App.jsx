@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from "react";
+import { getAllSuperHeros } from "./utils/apis"
 import './App.css'
+import SuperHeroList from "./Components/SuperHeroList";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [superHeros, setSuperHeros] = useState([]);
+
+
+
+  // the useEffect takes 2 parameter/arguments. a callback function and a dependecies array.
+  //The callback function is the function that will tun when the page loads.
+  // the dependecies array is where we put the state variables that useEffect will watch. When that state variable is changed it will run the callback function.
+  // when the array is empty it will only tun once on a page load.
+  useEffect(() => {
+    getAllSuperHeros().then((res) => {
+      setSuperHeros(res)
+    });
+  }, []);
+
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>SuperHeros</h1>
+      <SuperHeroList />
+      {superHeros.map((item) => {
+        return <h2 key={item.id}>{item.name}</h2>
+      })}
     </>
   )
 }
+
+
 
 export default App
